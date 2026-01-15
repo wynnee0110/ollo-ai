@@ -2,6 +2,10 @@
 
 import Chatbox from "./components/chatbox";
 import { useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import Header from "./components/header"
+
 
 export default function Home() {
   const [input, setInput] = useState("");   // typing
@@ -40,16 +44,23 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-zinc-50 dark:bg-black">
+    <div className="flex flex-col min-h-screen bg-zinc-50 dark:bg-black ">
+      <Header />
 
       {/* Messages */}
-      <div className="flex-1 flex items-center justify-center px-60">
+      <div className="flex-1 flex items-center justify-center px-90 mt-10">
         {loading ? (
           <p className="text-xl">Thinking...</p>
         ) : (
-          <h1 className="text-2xl">{reply || "Reply"}</h1>
+<div className="prose dark:prose-invert max-w-none ">
+  {reply ? (
+    <ReactMarkdown remarkPlugins={[remarkGfm]}>{reply}</ReactMarkdown>
+  ) : (
+    <span className="text-2xl">How was your day?</span>
+  )}
+</div>
         )}
-      </div>
+</div>
 
       {/* Chatbox */}
       <div className="p-4 flex justify-center">

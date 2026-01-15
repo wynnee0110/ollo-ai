@@ -18,8 +18,14 @@ export async function POST(req: Request) {
     );
 
     const model = genAI.getGenerativeModel({
-      model: "models/gemini-flash-latest"
+      model: "models/gemini-flash-latest",
+      systemInstruction: `
+      `.trim()
+
+      
     });
+       
+
 
     const result = await model.generateContent(body.prompt);
 
