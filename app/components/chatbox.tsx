@@ -1,4 +1,7 @@
-import { useEffect, useState } from "react";
+"use client";
+
+import { useEffect, useState, useRef } from "react";
+import { PaperAirplaneIcon } from "@heroicons/react/24/solid";
 
 type ChatboxProps = {
   value: string;
@@ -7,49 +10,60 @@ type ChatboxProps = {
   disabled?: boolean;
 };
 
-const PLACEHOLDER_TEXT = "How was your day?";
+// Optional: phrases for typewriter placeholder
+const PHRASES = [
+  "How was your day?",
+  "What are you working on?",
+  "Ask me anything!",
+  "Need coding help?",
+];
 
-function Chatbox({
-  value,
-  onChange,
-  onSend,
-  disabled = false,
-}: ChatboxProps) {
+function Chatbox({ value, onChange, onSend, disabled = false }: ChatboxProps) {
   const [placeholder, setPlaceholder] = useState("");
+  const [phraseIndex, setPhraseIndex] = useState(0);
+  const [charIndex, setCharIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
 
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+ 
+
+  // Auto-expand textarea as user types
   useEffect(() => {
-    if (value) return; // stop typing when user starts typing
+    const textarea = textareaRef.current;
+    if (!textarea) return;
 
-    let index = 0;
-    const interval = setInterval(() => {
-      setPlaceholder(PLACEHOLDER_TEXT.slice(0, index + 1));
-      index++;
-
-      if (index === PLACEHOLDER_TEXT.length) {
-        clearInterval(interval);
-      }
-    }, 70); // typing speed
-
-    return () => clearInterval(interval);
+    const maxHeight = 192;
+    textarea.style.height = "auto"; // reset height
+    textarea.style.height = Math.min(textarea.scrollHeight, maxHeight) + "px";
+    
+    textarea.style.overflowY =
+    textarea.scrollHeight > maxHeight ? "auto" : "hidden";
+     // set to scrollHeight
   }, [value]);
 
   return (
     <div className="w-full flex justify-center gap-2">
       <textarea
+        ref={textareaRef}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
-        rows={2}
+        placeholder= "Ask anything"
+        rows={1} // start small
         className="
           w-full max-w-xl
+          p-4 py-3
           resize-none
-          rounded-xl
-          p-3
+          overflow-hidden
+          scrollbar-hide
+          rounded-2xl
           text-white
           bg-white/10
+          custom-scrollbar
           backdrop-blur-md
           outline-none
           border border-white/20
+           max-h-48
         "
         onKeyDown={(e) => {
           if (e.key === "Enter" && !e.shiftKey) {
@@ -69,9 +83,13 @@ function Chatbox({
           bg-black text-white
           dark:bg-white dark:text-black
           disabled:opacity-50
+          max-h-15
+          h-12
+          self-end
         "
       >
-        Send
+        <PaperAirplaneIcon className="w-6 h-6" />
+  
       </button>
     </div>
   );
