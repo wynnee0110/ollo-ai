@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import Header from "./components/header"
+import {  useRef } from "react";
+
 
 
 export default function Home() {
@@ -22,24 +24,25 @@ const [displayText, setDisplayText] = useState("");
 const [phraseIndex, setPhraseIndex] = useState(0);
 const [charIndex, setCharIndex] = useState(0);
 const [isDeleting, setIsDeleting] = useState(false);
+const bottomRef = useRef<HTMLDivElement | null>(null);
 
 useEffect(() => {
   const currentPhrase = phrases[phraseIndex];
   let timeout: NodeJS.Timeout;
 
   if (!isDeleting) {
-    // Typing
+  
     timeout = setTimeout(() => {
       setDisplayText(currentPhrase.slice(0, charIndex + 1));
       setCharIndex(charIndex + 1);
 
       if (charIndex + 1 === currentPhrase.length) {
-        // Pause before deleting
+       
         setTimeout(() => setIsDeleting(true), 2200);
       }
     }, 80);
   } else {
-    // Deleting
+   
     timeout = setTimeout(() => {
       setDisplayText(currentPhrase.slice(0, charIndex - 0));
       setCharIndex(charIndex - 1);
@@ -82,9 +85,13 @@ useEffect(() => {
 
   const handleSend = () => {
     if (!input.trim()) return;
-    setPrompt(input);   // 🔥 AI triggers ONLY HERE
+    setPrompt(input);   
     setInput("");       // clear textbox
   };
+
+  useEffect(() => {
+  bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+}, [reply, loading]);
 
   return (
     <div className="flex flex-col min-h-screen bg-zinc-50 dark:bg-black">
@@ -95,7 +102,7 @@ useEffect(() => {
         {loading ? (
           <p className="text-xl">Thinking...</p>
         ) : (
-<div className="prose dark:prose-invert max-w-none text-md ">
+<div className="prose dark:prose-invert max-w-none text-md scroll-smooth">
   {reply ? (
     <ReactMarkdown remarkPlugins={[remarkGfm]}>{reply}</ReactMarkdown>
   ) : (
@@ -106,6 +113,7 @@ useEffect(() => {
   )}
 </div>
         )}
+  <div ref={bottomRef} />
 </div>
 
       {/* Chatbox */}

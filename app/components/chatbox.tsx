@@ -10,7 +10,7 @@ type ChatboxProps = {
   disabled?: boolean;
 };
 
-// Optional: phrases for typewriter placeholder
+
 const PHRASES = [
   "How was your day?",
   "What are you working on?",
@@ -28,18 +28,18 @@ function Chatbox({ value, onChange, onSend, disabled = false }: ChatboxProps) {
 
  
 
-  // Auto-expand textarea as user types
+
   useEffect(() => {
     const textarea = textareaRef.current;
     if (!textarea) return;
 
     const maxHeight = 192;
-    textarea.style.height = "auto"; // reset height
+    textarea.style.height = "auto"; 
     textarea.style.height = Math.min(textarea.scrollHeight, maxHeight) + "px";
     
     textarea.style.overflowY =
     textarea.scrollHeight > maxHeight ? "auto" : "hidden";
-     // set to scrollHeight
+     
   }, [value]);
 
   return (
@@ -49,7 +49,7 @@ function Chatbox({ value, onChange, onSend, disabled = false }: ChatboxProps) {
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder= "Ask anything"
-        rows={1} // start small
+        rows={1} 
         className="
           w-full max-w-xl
           p-4 py-3
@@ -63,7 +63,7 @@ function Chatbox({ value, onChange, onSend, disabled = false }: ChatboxProps) {
           backdrop-blur-md
           outline-none
           border border-white/20
-           max-h-48
+          max-h-48
         "
         onKeyDown={(e) => {
           if (e.key === "Enter" && !e.shiftKey) {
