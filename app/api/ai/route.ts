@@ -22,12 +22,11 @@ export async function POST(req: Request) {
       systemInstruction: `
       `.trim()
 
-      
     });
        
 
 
-    const result = await model.generateContent(body.prompt);
+  const result = await model.generateContent(body.prompt);
 
     return Response.json({
       reply: result.response.text()

@@ -6,6 +6,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import Header from "./components/header"
 import {  useRef } from "react";
+import Sidebar from "./components/sidebar";
 
 
 
@@ -94,9 +95,10 @@ useEffect(() => {
 }, [reply, loading]);
 
   return (
+    <>
+    
     <div className="flex flex-col min-h-screen bg-zinc-50 dark:bg-black">
       <Header />
-
       {/* Messages */}
       <div className="flex-1 flex items-center justify-center px-4 sm:px-8 md:px-16 lg:px-32 mt-10">
         {loading ? (
@@ -127,5 +129,6 @@ useEffect(() => {
       </div>
 
     </div>
+    </>
   );
 }
